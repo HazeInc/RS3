@@ -84,7 +84,14 @@ public class BurthorpeCourse extends  Task<ClientContext> {
             if (obstacles.getObstacleArea().contains(ctx.players.local())) {
                 final GameObject gameObject = ctx.objects.select().id(obstacles.getObstacleId()).nearest().poll();
                 if (gameObject.inViewport()) {
+                	last = System.currentTimeMillis();
                     gameObject.interact(obstacles.getObstacleInteraction(), obstacles.getObstacleName());
+                    	Condition.wait(new Callable<Boolean>() {
+                        @Override
+                        public Boolean call() throws Exception {
+                            return ctx.players.local().animation() != -1;
+                        }
+                    }, 150, 10);
                 } else {
                     ctx.camera.turnTo(gameObject);
                 }
